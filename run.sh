@@ -1,0 +1,1 @@
+nodemon --ext pde --exec processing-java --sketch=$PWD --run
