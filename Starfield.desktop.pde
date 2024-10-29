@@ -1,68 +1,7 @@
-// --- BEGIN SHIM; REMOVE TO RUN ON DESKTOP ---
-// (jump to line 62 for project code)
-
-void circle(float x, float y, float extent) {
-  ellipse(x, y, extent, extent);
-}
-
-void square(float x, float y, float extent) {
-  rect(x, y, extent, extent)
-}
-
-void clear() {
-  background(color(255, 255, 255));
-}
-
-void delay(int length) {
-  long blockTill = Date.now() + length;
-  while (Date.now() <= blockTill) {}
-}
-
-String __errBuff = "";
-String __outBuff = "";
-
-var System = {};
-System.out = {};
-System.err = {};
-
-System.err.print = function (chars) {
-  __errBuff += chars;
-  String[] newlines = __errBuff.split("\n");
-  if (newlines.length > 0) {
-    String[] linesToPrint = newlines.slice(0, newlines.length - 1);
-    linesToPrint.forEach(function (line) {
-      console.error(line);
-    })
-    __errBuff = newlines[newlines.length - 1];
-  }
-};
-
-System.currentTimeMillis = function () { return Date.now(); }
-
-System.err.println = function (chars) {
-  System.err.print(chars + "\n");
-};
-
-System.out.print = function (chars) {
-  __outBuff += chars;
-  String[] newlines = __outBuff.split("\n");
-  if (newlines.length > 0) {
-    String[] linesToPrint = newlines.slice(0, newlines.length - 1);
-    linesToPrint.forEach(function (line) {
-      console.log(line);
-    })
-    __outBuff = newlines[newlines.length - 1];
-  }
-};
-
-System.out.println = function (chars) {
-  System.out.print(chars + "\n");
-};
-// --- END SHIM; REMOVE TO RUN ON DEKTOP ---
 import java.util.*;
 
 ArrayList<Particle> particles;
-ArrayList<AmbientStar> ambientStars = new ArrayList();
+ArrayList<AmbientStar> ambientStars = new ArrayList<>();
 
 color framebufferColor = color(5);
 boolean paused = false;
@@ -76,6 +15,8 @@ final int MAX_PARTICLES = 500;
 
 
 void setup() {
+
+  pixelDensity(1);
   // size(512, 512, P3D);
   size(512, 512);
   noStroke();
@@ -83,7 +24,7 @@ void setup() {
   for (int i = 0; i < NUM_AMBIENT_STARS; i++) {
     ambientStars.add(new AmbientStar(random(width + MAX_CULL_DEV) * (Math.random() > 0.5 ? 1 : -1), random(height + MAX_CULL_DEV) * (Math.random() > 0.5 ? 1 : -1)));
   }
-  particles = new ArrayList();
+  particles = new ArrayList<>();
   particles.add(new OddballParticle(width / 2, width / 2, 1, 0));
   background(framebufferColor);
   lastFrameTime = System.currentTimeMillis();
@@ -97,28 +38,28 @@ void keyPressed() {
 
 void draw() {
   float fps = 1000.0f / (System.currentTimeMillis() - lastFrameTime);
-  window.title = ("Deep Space Exploration | FPS: " + fps.toFixed(2));
+  surface.setTitle("Deep Space Exploration | FPS: " + String.format("%.2f", fps));
   lastFrameTime = System.currentTimeMillis();
-  pushMatrix();
+  push();
   translate((mouseX - width / 2) * -0.05, (mouseY - height / 2) * -0.05);
   for (AmbientStar star : ambientStars) {
     star.tick();
     star.draw();
   }
-  popMatrix();
+  pop();
 
   translate((mouseX - width / 2) * -0.3, (mouseY - height / 2) * -0.3);
 
   loadPixels();
   doMotionBlur();
-  ArrayList<Particle> pendingCull = new ArrayList();
+  ArrayList<Particle> pendingCull = new ArrayList<>();
 
   // bulk loading/writing of framebuffer
   // is a cpu shader optimal? no. is it optimal to read from the gpu, shade it on the cpu, and write it back? no.
   // but yes
   
   ArrayList<Particle> current = particles;
-  particles = particles.clone();
+  particles = (ArrayList<Particle>) particles.clone();
   for (Particle parc : current) {
     if (parc.x > width + MAX_CULL_DEV || parc.x < -MAX_CULL_DEV || parc.y > height + MAX_CULL_DEV || parc.y < -MAX_CULL_DEV) {
       pendingCull.add(parc);
@@ -191,11 +132,11 @@ class Particle {
   }
 
   void draw() {
-    pushMatrix();
+    push();
     translate((float) x, (float) y);
     fill(clr);
     circle(0, 0, 10);
-    popMatrix();
+    pop();
   }
 
   void shade() {
@@ -237,11 +178,11 @@ class Planet extends Star {
   }
 
   void draw() {
-    pushMatrix();
+    push();
     translate((float) x, (float) y);
     fill(clr);
     circle(0, 0, realSize * 2);
-    popMatrix();
+    pop();
   }
 
   void shade() {
@@ -271,11 +212,11 @@ class Star extends Particle {
 
   void draw() {
     if (tickedPeriod < 10) return;
-    pushMatrix();
+    push();
     translate((float) x, (float) y);
     fill(clr);
     circle(0, 0, realSize);
-    popMatrix();
+    pop();
   }
 
   void shade() {
@@ -328,10 +269,10 @@ class AmbientStar {
   }
 
   void draw() {
-    pushMatrix();
+    push();
     translate((float) x, (float) y);
     fill(lerpColor(clr, color(0), lerpAmt));
     circle(0, 0, 3);
-    popMatrix();
+    pop();
   }
 }

@@ -10128,7 +10128,7 @@
         if (loaded === sourcesCount) if (errors.length === 0) try {
           return new Processing(canvas, code.join("\n"))
         } catch(e) {
-          throw "Processing.js: Unable to execute pjs sketch: " + e;
+          throw "Processing.js: Unable to execute pjs sketch: " + `(${e}) ` + e.stack + "\n\nCode:\n" + Processing.compile(code.join("\n"));
         } else throw "Processing.js: Unable to load pjs sketch files: " + errors.join("\n");
       }
       if (filename.charAt(0) === "#") {
