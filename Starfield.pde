@@ -97,7 +97,7 @@ void keyPressed() {
 
 void draw() {
   float fps = 1000.0f / (System.currentTimeMillis() - lastFrameTime);
-  window.title = ("Deep Space Exploration | FPS: " + fps.toFixed(2));
+  document.title = ("Deep Space Exploration | FPS: " + fps.toFixed(2));
   lastFrameTime = System.currentTimeMillis();
   pushMatrix();
   translate((mouseX - width / 2) * -0.05, (mouseY - height / 2) * -0.05);
