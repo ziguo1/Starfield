@@ -257,9 +257,9 @@ class Star extends Particle {
 
   Star(double x, double y, double speed, double angle) {
     super(x, y, speed, angle, color(
-        (int) (Math.random() * 55 + 200),
-        (int) (Math.random() * 100 + ((Math.random() < 0.5) ? 150 : 200)),
-        (int) (Math.random() * 155 + ((Math.random() < 0.5) ? 100 : 200))
+        (int) (Math.random() * 30 + 225),
+        (int) (Math.random() * 30 + 225),
+        (int) (Math.random() * 30 + (Math.random() < 0.5 ? 225 : 200))
     ));
     targetSize = (float) (Math.random() * 10 + 5);
     realSize = targetSize * (float) Math.min(Math.random(), 0.5);
@@ -271,6 +271,10 @@ class Star extends Particle {
       realSize += 0.1;
     }
     tickedPeriod++;
+  }
+
+  void shade() {
+    super.shade(50, clr);
   }
 
   void draw() {
