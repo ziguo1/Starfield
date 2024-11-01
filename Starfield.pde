@@ -144,7 +144,7 @@ void draw() {
 void doMotionBlur() {
   for (int i = 0; i < pixels.length; i++) {
     color pxClr = pixels[i];
-    pixels[i] = lerpColor(pxClr, framebufferColor, 0.6);
+    pixels[i] = lerpColor(pxClr, framebufferColor, 0.3);
   }
 }
 
